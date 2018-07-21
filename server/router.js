@@ -40,9 +40,9 @@ router.post('/battle/event', (req, res)=>{
 })
 // 对战事件轮询
 router.get('/battle/event/battle-id/*/LSN/*', (req, res)=>{
-  let data = req.split('/')
-  let id = data[3]
-  let LSN = data[5]
+  let data = req.path.split('/')
+  let id = data[4]
+  let LSN = data[6]
   let event = battle.getNewEvent(id, LSN)
   res.send({status: 'ok', event: event})
 })

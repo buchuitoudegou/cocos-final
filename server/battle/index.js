@@ -6,8 +6,10 @@ module.exports = {
   battle : [],
   // 添加到等待队列
   addWaitinglist(username){
-    if (this.waitinglist.length == 0)
+    if (this.waitinglist.length == 0) {
       this.waitinglist.push(username)
+      return
+    }
     else if (this.waitinglist.length == 1 && 
       this.waitinglist[0] != username && !this.userInBattle(username)) {
       user1 = this.waitinglist[0]

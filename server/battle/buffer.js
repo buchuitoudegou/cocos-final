@@ -1,9 +1,11 @@
 module.exports = {
   /*事件
-  eventType: string (create/end-battle)
-  monstertype: string
-  positionX: number
-  positionY: number
+  eventType: string (monster/end-battle)
+  monstertype: string (turret/monster/null)
+  master: string (username)
+  action: string(die/create/null)
+  positionX: number | null
+  positionY: number | null
   */
   /*对战信息
   lastLSN: number
@@ -17,8 +19,8 @@ module.exports = {
   */
   eventBuffer: [],
   battleBuffer: [],
-  addEvent: (id, event)=>{
-    eventBuffer.forEach(ele=>{
+  addEvent(id, event){
+    this.eventBuffer.forEach(ele=>{
       if (ele.id == id) {
         let newLSN = ele.events.length
         ele.events.push({
@@ -31,13 +33,16 @@ module.exports = {
   addBattleInfo: (id, battleInfo)=>{
     // todo
   },
-  getEvent: (id, LSN)=>{
-    eventBuffer.forEach(ele=>{
+  getEvent(id, LSN){
+    let data = null
+    this.eventBuffer.forEach(ele=>{
       if (ele.id == id) {
-        if (LSN < ele.events[ele.events.length - 1].LSN)
-          return ele.events[ele.events.length - 1]
+        if (LSN < ele.events[ele.events.length - 1].LSN) {
+          data = ele.events[ele.events.length - 1]
+          return;
+        }
       }
     })
-    return null
+    return data
   }
 }
