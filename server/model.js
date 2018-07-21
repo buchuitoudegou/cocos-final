@@ -3,9 +3,9 @@ const fs = require('fs')
 class fileRW {
   constructor() {}
   getUserByName(name) {
-    let userInfo = fs.readFileSync('./user.json').toString()
-    let users = JSON.parse(userInfo)
-    let query = null 
+  let userInfo = fs.readFileSync('./server/user.json').toString()
+  let users = JSON.parse(userInfo)
+  let query = null 
     users.forEach(element => {
       if (element.name == name) {
         query = element
@@ -15,10 +15,10 @@ class fileRW {
     return query
   }
   addNewUser(user) {
-    let userInfo = fs.readFileSync('./user.json').toString()
+    let userInfo = fs.readFileSync('./server/user.json').toString()
     let users = JSON.parse(userInfo)
     users.push(user)
-    fs.writeFileSync('./user.json', JSON.stringify(users))
+    fs.writeFileSync('./server/user.json', JSON.stringify(users))
   }
 }
 
