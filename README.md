@@ -6,6 +6,7 @@ cocos2d 期末项目
 2. 每个分支里面只放resource和classes，自己在本地创建项目
 3. <strong>不要直接修改test和master</strong>
 4. 分支名feature/{实现的功能}。如feature/server
+5. 服务端运行, 在根目录: node server/bin/www
 
 ## 基本架构
 ### 前端用cocos2d 3.x，用物理引擎渲染画面
@@ -46,4 +47,4 @@ cocos2d 期末项目
   + 对战申请POST: api/battle/waiting/{用户名}, 返回信息: {status: ok}
   + 对战开始轮询GET: api/battle/begin/{用户名}, 返回信息: {status: begin/waiting, id: {对战id}}
   + 发送对战事件POST: api/battle/event, request-data: {id: 对战id, event: {eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}, 返回信息: {status: ok}
-  + 对战事件轮询GET: api/battle/event/battle-id/{对战id}/LSN/{当前LSN}, 返回信息: {status: ok, event: {eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}
+  + 对战事件轮询GET: api/battle/event/battle-id/{对战id}/LSN/{当前LSN}, 返回信息: {status: ok, event: [{eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}]

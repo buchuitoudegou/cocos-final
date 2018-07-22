@@ -34,13 +34,18 @@ module.exports = {
     // todo
   },
   getEvent(id, LSN){
-    let data = null
+    let data = []
     this.eventBuffer.forEach(ele=>{
       if (ele.id == id) {
-        if (LSN < ele.events[ele.events.length - 1].LSN) {
+        /*if (LSN < ele.events[ele.events.length - 1].LSN) {
           data = ele.events[ele.events.length - 1]
           return;
-        }
+        }*/
+        ele.events.forEach(value=>{
+          if (value.LSN > LSN) {
+            data.push(value)
+          }
+        })
       }
     })
     return data

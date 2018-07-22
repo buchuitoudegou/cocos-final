@@ -12,7 +12,7 @@ class fileRW {
         return
       }
     });
-    return query
+    return query  
   }
   addNewUser(user) {
     let userInfo = fs.readFileSync('./server/user.json').toString()

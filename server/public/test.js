@@ -85,15 +85,24 @@ window.onload = function() {
     $.ajax(`api/battle/event/battle-id/${id}/LSN/${LSN}`, {
       type: 'GET'
     }).done((result)=>{
+      console.log(result)
       let event_list = (name == 'ff') ? $('#list1').text() : $('#list2').text()
       if (result.event != null)
-        event_list += JSON.stringify(result.event.event)
+        event_list += JSON.stringify(result.event)
       if (name == 'ff') {
         $('#list1').text(event_list)
-        $('#LSN-0').text(result.event.LSN)
+        let curLSN = -999;
+        result.event.forEach(ele=>{
+          curLSN = ele.LSN > curLSN ? ele.LSN : curLSN;
+        })
+        $('#LSN-0').text(curLSN)
       } else {
+        let curLSN = -999;
+        result.event.forEach(ele=>{
+          curLSN = ele.LSN > curLSN ? ele.LSN : curLSN;
+        })
         $('#list2').text(event_list)
-        $('#LSN-1').text(result.event.LSN)
+        $('#LSN-1').text(curLSN)
       }
     })
   })
