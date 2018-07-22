@@ -21,7 +21,7 @@ module.exports = {
   },
   // 创建对战
   createBattle(user1, user2){
-    let id = (new Date()).valueOf()
+    let id = (new Date()).valueOf() % 1000000000
     this.battle.push({
       id: id,
       user1: user1,
@@ -49,8 +49,12 @@ module.exports = {
     return data
   },
   // 处理新事件
-  eventHandle({id, event}){
-    buffer.addEvent(id, event)
+  eventHandle(data){
+    data.id = parseInt(data.id)
+    data.positionX = Number(data.positionX)
+    data.positionY = Number(data.positionY)
+    data.monsterType = Number(data.monsterType)
+    buffer.addEvent(data.id, data)
   },
   // 轮询获取新事件
   getNewEvent(id, LSN){

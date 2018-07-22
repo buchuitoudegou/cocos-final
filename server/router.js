@@ -37,6 +37,7 @@ router.get('/battle/begin/*', (req, res)=>{
 // 对战事件发出
 router.post('/battle/event', (req, res)=>{
   let data = req.body
+  //console.log(req.body)
   battle.eventHandle(data)
   res.send({status: 'ok'})
 })

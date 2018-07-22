@@ -62,6 +62,7 @@ window.onload = function() {
     let y = $(this).attr('y')
     let id = (name == 'ff') ? $('#battle-id-1').text() : $('#battle-id-2').text();
     let data = {
+      id: Number(id),
       eventType: 'monster',
       monsterType: monsterType,
       master: name,
@@ -71,10 +72,7 @@ window.onload = function() {
     }
     $.ajax('/api/battle/event', {
       type: 'POST',
-      data: {
-        id: Number(id),
-        event: data
-      }
+      data: data
     }).done((result)=>{
       console.log(result)
     })

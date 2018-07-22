@@ -23,10 +23,8 @@ module.exports = {
     this.eventBuffer.forEach(ele=>{
       if (ele.id == id) {
         let newLSN = ele.events.length
-        ele.events.push({
-          LSN: newLSN,
-          event: event
-        })
+        event.LSN = newLSN
+        ele.events.push(event)
       }
     })
   },

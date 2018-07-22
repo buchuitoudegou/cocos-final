@@ -25,14 +25,16 @@ class fileRW {
     let userInfo = fs.readFileSync('./server/user.json').toString()
     let users = JSON.parse(userInfo)
     let index = -1
+    let i = -1
     users.forEach(ele=>{
       index ++;
-      if (ele.username == username) {
-        return;
+      if (ele.name == username) {
+        i = index
       }
     })
-    if (index != -1)
-      users[index].point ++   
+    console.log(i)
+    if (i != -1)
+      users[i].point ++   
     fs.writeFileSync('./server/user.json', JSON.stringify(users))
   }
   addBattleLog(log) {
@@ -58,6 +60,7 @@ const file = new fileRW()
 module.exports = {
   userLogin: (userInfo)=>{
     let curUser = file.getUserByName(userInfo.name)
+    console.log(userInfo)
     if (curUser != null && curUser.password == userInfo.password)
       return {status: 'ok'}
     else if (curUser != null && curUser.password != userInfo.password) 
