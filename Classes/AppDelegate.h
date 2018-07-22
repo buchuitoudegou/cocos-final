@@ -1,6 +1,6 @@
 #ifndef  _APP_DELEGATE_H_
 #define  _APP_DELEGATE_H_
-
+#include <string>
 #include "cocos2d.h"
 
 /**
@@ -33,6 +33,7 @@ public:
   @param  the pointer of the application
   */
   virtual void applicationWillEnterForeground();
+  std::string username;
 };
 
 #endif // _APP_DELEGATE_H_

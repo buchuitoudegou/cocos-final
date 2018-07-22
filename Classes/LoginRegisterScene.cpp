@@ -5,7 +5,7 @@
 #include "network\HttpClient.h"
 #include "json/document.h"
 #include "UserScene.h"
-
+#include "AppDelegate.h"
 USING_NS_CC;
 using namespace cocos2d::network;
 using namespace cocos2d::ui;
@@ -107,7 +107,7 @@ void LoginRegisterScene::loginButtonCallback(cocos2d::Ref * pSender) {
 	request->setUrl("http://127.0.0.1:3000/api/login");
 	request->setResponseCallback(CC_CALLBACK_2(LoginRegisterScene::onHttpRequestCompleted, this));
 	//std::string  postData = "{ \"name\":\"" + usernameInput->getString() + "\"," + "\"password\":\"" + passwordInput->getString() + "\"}";
-	std::string  postData = "{name:" + usernameInput->getString() + "," + "password:" + passwordInput->getString() + "}";
+	std::string  postData = "name=" + usernameInput->getString() + "&password=" + passwordInput->getString();
   request->setRequestData(postData.c_str(), postData.length());
   // HttpClient::getInstance()->enableCookies("cookie");
   cocos2d::network::HttpClient::getInstance()->send(request);
@@ -122,7 +122,7 @@ void LoginRegisterScene::registerButtonCallback(Ref * pSender) {
   request->setResponseCallback(CC_CALLBACK_2(LoginRegisterScene::onHttpRegisterRequestCompleted, this)
   );
   //std::string  postData = "{ \"name\":\""+ usernameInput->getString()+"\","+"\"password\":\""+ passwordInput->getString()+"\"}";
-  std::string  postData = "{name:" + usernameInput->getString() + "," + "password:" + passwordInput->getString() + "}";
+  std::string  postData = "name=" + usernameInput->getString() +"&password=" + passwordInput->getString();
 
   request->setRequestData(postData.c_str(), postData.length());
   cocos2d::network::HttpClient::getInstance()->send(request);
@@ -141,9 +141,12 @@ void LoginRegisterScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse
   doc.Parse(buffer->data(), buffer->size());
   if (doc["status"] == "ok") {
     this->messageBox->setString("Login successfully.");
-	//登录成功跳转界面
-	//Director::getInstance()->replaceScene(
-	//	TransitionSlideInT::create(0.6f, UserScene::createScene()));
+	//登录成功设置用户名、跳转界面
+	//auto app = (AppDelegate *)Application::getInstance();
+	////auto app = AppDelegate::getInstance();
+	//app->username = usernameInput->getString();
+	Director::getInstance()->replaceScene(
+		TransitionSlideInT::create(0.6f, UserScene::createScene(usernameInput->getString())));
   }
   else {
     this->messageBox->setString(std::string("Login fail.\n") + doc["status"].GetString());
