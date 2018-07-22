@@ -84,7 +84,7 @@ bool UserScene::init()
 	waterShortInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(waterShortInfo, 2);
 
-	auto solidShortInfo = Label::createWithSystemFont("attribute:earth\nattack range:50", "Arial", 15);
+	auto solidShortInfo = Label::createWithSystemFont("attribute:wood\nattack range:50", "Arial", 15);
 	solidShortInfo->setPosition(visibleSize.width / 2 + 200 + 50, visibleSize.height / 2 + 50);
 	solidShortInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(solidShortInfo, 2);
@@ -99,7 +99,7 @@ bool UserScene::init()
 	waterRemoteInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(waterRemoteInfo, 2);
 
-	auto solidRemoteInfo = Label::createWithSystemFont("attribute:earth\nattack range:90", "Arial", 15);
+	auto solidRemoteInfo = Label::createWithSystemFont("attribute:wood\nattack range:90", "Arial", 15);
 	solidRemoteInfo->setPosition(visibleSize.width / 2 + 200 + 50, visibleSize.height / 2-110);
 	solidRemoteInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(solidRemoteInfo, 2);
@@ -209,6 +209,8 @@ void UserScene::onHttpRecordRequestCompleted(HttpClient* sender, HttpResponse* r
 		auto records = doc["log"].GetArray();
 		//添加信息
 		std::string record = "Battle records:\nenemy    result\n  ";
+		//if (records.Size == 0)
+		//	record += "  empty";
 		for (auto& v : records) {
 			auto enemy= UserScene::name==v["user1"].GetString()? v["user2"].GetString(): v["user1"].GetString();
 			std::string isWin = UserScene::name == v["winner"].GetString() ? "          win" : "          lose";
