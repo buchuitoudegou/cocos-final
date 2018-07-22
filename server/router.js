@@ -25,9 +25,9 @@ router.get('/battle/waiting/*', (req, res)=>{
 // 对战开始轮询
 router.get('/battle/begin/*', (req, res)=>{
   let username = req.path.split('/')[3]
-  let id = battle.battleBegin(username)
+  let {id,side} = battle.battleBegin(username)
   if (id != null) {
-    res.send({status: 'begin', id: id})
+    res.send({status: 'begin', id: id, side: side})
   } else {
     res.send({status: 'waiting'})
   }

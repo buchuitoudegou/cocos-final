@@ -59,12 +59,17 @@ module.exports = {
   // 对战开始
   battleBegin(username){
     let data = null
+    let side = 0
     this.battle.forEach(ele=>{
-      if (ele.user1 == username || ele.user2 == username) {
+      if (ele.user1 == username) {
         data = ele.id
+        side = 1
+      } else if (ele.user2 == username) {
+        data = ele.id
+        side = 2
       }
     })
-    return data
+    return {data,side}
   },
   // 信息同步
   syncHandle(){
