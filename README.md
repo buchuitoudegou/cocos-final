@@ -44,7 +44,7 @@ cocos2d 期末项目
 ### API设计
   + 注册POST:api/register, request-data: {name: {用户名}, password: {密码}}, 返回信息: {status: ok/dulplicated username}
   + 登陆POST:api/login, request-data: {name: {用户名}, password: {密码}}, 返回信息: {status: ok/username error/password error}
-  + 对战申请POST: api/battle/waiting/{用户名}, 返回信息: {status: ok}
+  + 对战申请GET: api/battle/waiting/{用户名}, 返回信息: {status: ok}
   + 对战开始轮询GET: api/battle/begin/{用户名}, 返回信息: {status: begin/waiting, id: {对战id}}
   + 发送对战事件POST: api/battle/event, request-data: {id: 对战id, event: {eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}, 返回信息: {status: ok}
-  + 对战事件轮询GET: api/battle/event/battle-id/{对战id}/LSN/{当前LSN}, 返回信息: {status: ok, event: [{eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}]
+  + 对战事件轮询GET: api/battle/event/battle-id/{对战id}/LSN/{当前LSN}, 返回信息: {status: ok, events: [{LSN: LSN, event:{eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}}]

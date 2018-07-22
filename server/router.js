@@ -43,7 +43,7 @@ router.get('/battle/event/battle-id/*/LSN/*', (req, res)=>{
   let data = req.path.split('/')
   let id = data[4]
   let LSN = data[6]
-  let event = battle.getNewEvent(id, LSN)
-  res.send({status: 'ok', event: event})
+  let events = battle.getNewEvent(id, LSN)
+  res.send({status: 'ok', events: event})
 })
 module.exports = router
