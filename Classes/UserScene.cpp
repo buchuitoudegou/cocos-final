@@ -1,7 +1,9 @@
 ﻿#include "UserScene.h"
 #include "LoginRegisterScene.h"
 #include "AppDelegate.h"
-
+#include "json\document.h"
+#include <string>
+#include "Utils.h"
 #include "fightScene.h"
 USING_NS_CC;
 
@@ -22,6 +24,19 @@ bool UserScene::init()
 	{
 		return false;
 	}
+	//查询积分
+	HttpRequest* request = new HttpRequest();
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setUrl("http://127.0.0.1:3000/api/point/username/" + UserScene::name);
+	request->setResponseCallback(CC_CALLBACK_2(UserScene::onHttpPointRequestCompleted, this));
+	cocos2d::network::HttpClient::getInstance()->send(request);
+	request->release();
+
+
+	//获取对战记录
+	UserScene::getBattleRecord();
+
+
 
 	//背景图片
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -34,10 +49,7 @@ bool UserScene::init()
 
 	//用户名
 	//AppDelegate* app = (AppDelegate *)Application::getInstance();
-	auto username = Label::createWithSystemFont("Welcome,"+UserScene::name, "Arial", 25);
-	username->setPosition(origin.x + 100, visibleSize.height - 50);
-	username->setColor(Color3B(237, 216, 199));
-	this->addChild(username, 1);
+
 
 	//卡牌界面
 	auto fireShort = MenuItemImage::create("fire-short.png", "fire-short.png", CC_CALLBACK_1(UserScene::showCardInfo, this, 0));
@@ -48,12 +60,12 @@ bool UserScene::init()
 	auto solidRemote = MenuItemImage::create("solid-remote.png", "solid-remote.png", CC_CALLBACK_1(UserScene::showCardInfo, this, 5));
 
 	//设置卡片的位置
-	fireShort->setPosition(Vec2(origin.x-170, origin.y+30));
-	waterShort->setPosition(Vec2(origin.x, origin.y+35));
-	solidShort->setPosition(Vec2(origin.x +200, origin.y+30));
-	fireRemote->setPosition(Vec2(origin.x-170, origin.y-130));
-	waterRemote->setPosition(Vec2(origin.x, origin.y-130));
-	solidRemote->setPosition(Vec2(origin.x +200, origin.y -130));
+	fireShort->setPosition(Vec2(origin.x-170+50, origin.y+30));
+	waterShort->setPosition(Vec2(origin.x + 50, origin.y+35));
+	solidShort->setPosition(Vec2(origin.x +200 + 50, origin.y+30));
+	fireRemote->setPosition(Vec2(origin.x-170 + 50, origin.y-130));
+	waterRemote->setPosition(Vec2(origin.x + 50, origin.y-130));
+	solidRemote->setPosition(Vec2(origin.x +200 + 50, origin.y -130));
 
 	auto cardMenu = Menu::create(fireShort, waterShort, solidShort, fireRemote, waterRemote, solidRemote, NULL);
 	cardMenu->setAnchorPoint(Vec2(0.5, 0.5));
@@ -62,32 +74,32 @@ bool UserScene::init()
 
 	//六卡片信息
 	auto fireShortInfo = Label::createWithSystemFont("attribute:fire\nattack range:50", "Arial", 15);
-	fireShortInfo->setPosition(visibleSize.width/2-180,visibleSize.height/2+50);
+	fireShortInfo->setPosition(visibleSize.width/2-180 + 50,visibleSize.height/2+50);
 	fireShortInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(fireShortInfo, 2);
 
 	auto waterShortInfo = Label::createWithSystemFont("attribute:water\nattack range:50", "Arial", 15);
-	waterShortInfo->setPosition(visibleSize.width / 2 - 10, visibleSize.height / 2 + 50);
+	waterShortInfo->setPosition(visibleSize.width / 2 - 10 + 50, visibleSize.height / 2 + 50);
 	waterShortInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(waterShortInfo, 2);
 
 	auto solidShortInfo = Label::createWithSystemFont("attribute:earth\nattack range:50", "Arial", 15);
-	solidShortInfo->setPosition(visibleSize.width / 2 + 200, visibleSize.height / 2 + 50);
+	solidShortInfo->setPosition(visibleSize.width / 2 + 200 + 50, visibleSize.height / 2 + 50);
 	solidShortInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(solidShortInfo, 2);
 
 	auto fireRemoteInfo = Label::createWithSystemFont("attribute:fire\nattack range:90", "Arial", 15);
-	fireRemoteInfo->setPosition(visibleSize.width / 2 - 180, visibleSize.height / 2-110);
+	fireRemoteInfo->setPosition(visibleSize.width / 2 - 180 + 50, visibleSize.height / 2-110);
 	fireRemoteInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(fireRemoteInfo, 2);
 
 	auto waterRemoteInfo = Label::createWithSystemFont("attribute:water\nattack range:90", "Arial", 15);
-	waterRemoteInfo->setPosition(visibleSize.width / 2 - 10, visibleSize.height / 2 -110);
+	waterRemoteInfo->setPosition(visibleSize.width / 2 - 10 + 50, visibleSize.height / 2 -110);
 	waterRemoteInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(waterRemoteInfo, 2);
 
 	auto solidRemoteInfo = Label::createWithSystemFont("attribute:earth\nattack range:90", "Arial", 15);
-	solidRemoteInfo->setPosition(visibleSize.width / 2 + 200, visibleSize.height / 2-110);
+	solidRemoteInfo->setPosition(visibleSize.width / 2 + 200 + 50, visibleSize.height / 2-110);
 	solidRemoteInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(solidRemoteInfo, 2);
 
@@ -140,4 +152,70 @@ void UserScene::initFight(Ref*) {
 	//转到斗争界面
 	Director::getInstance()->replaceScene(
 		TransitionSlideInT::create(0.6f, Fight::createScene(UserScene::name)));
+}
+
+
+
+
+void UserScene::onHttpPointRequestCompleted(HttpClient* sender, HttpResponse* response) {
+	if (!response) {
+		return;
+	}
+	if (!response->isSucceed()) {
+		log("response failed");
+		log("error buffer %s", response->getErrorBuffer());
+	}
+	auto buffer = response->getResponseData();
+	rapidjson::Document doc;
+	doc.Parse(buffer->data(), buffer->size());
+	if (doc["status"] == "ok") {
+		point = doc["point"].GetInt();
+		//添加信息
+		auto visibleSize = Director::getInstance()->getVisibleSize();
+		Vec2 origin = Director::getInstance()->getVisibleOrigin();
+		auto info = Label::createWithSystemFont("Welcome," + UserScene::name + "\nyour points:" + std::to_string(point).c_str(), "Arial", 25);
+		info->setPosition(origin.x + 100, visibleSize.height - 50);
+		info->setColor(Color3B(237, 216, 199));
+		this->addChild(info, 1);
+	}
+}
+
+void UserScene::getBattleRecord() {
+	HttpRequest* request = new HttpRequest();
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setUrl("http://127.0.0.1:3000/api/battlelog/username/" + UserScene::name);
+	request->setResponseCallback(CC_CALLBACK_2(UserScene::onHttpRecordRequestCompleted, this));
+	cocos2d::network::HttpClient::getInstance()->send(request);
+	request->release();
+
+}
+
+void UserScene::onHttpRecordRequestCompleted(HttpClient* sender, HttpResponse* response) {
+	if (!response) {
+		return;
+	}
+	if (!response->isSucceed()) {
+		log("response failed");
+		log("error buffer %s", response->getErrorBuffer());
+	}
+	auto buffer = response->getResponseData();
+	rapidjson::Document doc;
+	doc.Parse(buffer->data(), buffer->size());
+	if (doc["status"] == "ok") {
+		auto visibleSize = Director::getInstance()->getVisibleSize();
+		Vec2 origin = Director::getInstance()->getVisibleOrigin();
+		auto records = doc["log"].GetArray();
+		//添加信息
+		std::string record = "Battle records:\nenemy    result\n  ";
+		for (auto& v : records) {
+			auto enemy= UserScene::name==v["user1"].GetString()? v["user2"].GetString(): v["user1"].GetString();
+			std::string isWin = UserScene::name == v["winner"].GetString() ? "          win" : "          lose";
+			//record += std::to_string(v["id"].GetInt64());
+			record += enemy + isWin + "\n  ";
+		}
+		auto recordLabel = Label::createWithSystemFont(record, "Arial", 25);
+		recordLabel->setPosition(visibleSize.width/2-300, visibleSize.height - 200);
+		recordLabel->setColor(Color3B(237, 216, 199));
+		this->addChild(recordLabel, 1);
+	}
 }

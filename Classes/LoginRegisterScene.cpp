@@ -121,9 +121,7 @@ void LoginRegisterScene::registerButtonCallback(Ref * pSender) {
   request->setUrl("http://127.0.0.1:3000/api/register");
   request->setResponseCallback(CC_CALLBACK_2(LoginRegisterScene::onHttpRegisterRequestCompleted, this)
   );
-  //std::string  postData = "{ \"name\":\""+ usernameInput->getString()+"\","+"\"password\":\""+ passwordInput->getString()+"\"}";
   std::string  postData = "name=" + usernameInput->getString() +"&password=" + passwordInput->getString();
-
   request->setRequestData(postData.c_str(), postData.length());
   cocos2d::network::HttpClient::getInstance()->send(request);
   request->release();
@@ -142,9 +140,6 @@ void LoginRegisterScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse
   if (doc["status"] == "ok") {
     this->messageBox->setString("Login successfully.");
 	//登录成功设置用户名、跳转界面
-	//auto app = (AppDelegate *)Application::getInstance();
-	////auto app = AppDelegate::getInstance();
-	//app->username = usernameInput->getString();
 	Director::getInstance()->replaceScene(
 		TransitionSlideInT::create(0.6f, UserScene::createScene(usernameInput->getString())));
   }
