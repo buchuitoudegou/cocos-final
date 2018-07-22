@@ -21,7 +21,7 @@ module.exports = {
   },
   // 创建对战
   createBattle(user1, user2){
-    let id = this.battle.length
+    let id = (new Date()).valueOf()
     this.battle.push({
       id: id,
       user1: user1,
@@ -71,8 +71,23 @@ module.exports = {
     // todo
   },
   // 结束对战
-  endBattle(){
+  endBattle(username){
     // todo
     // 清理缓冲池
+    let data = null
+    let index = -1
+    battle.forEach(ele=>{
+      index ++;
+      if (ele.user1 == username || ele.user2 == username) {
+        data = ele;
+        return;
+      }
+    })
+    battle.splice(index, 1)
+    console.log(battle)
+    return data
+  },
+  battleLog(bat) {
+    file.battleLog(bat)
   }
 }

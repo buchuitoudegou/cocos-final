@@ -44,6 +44,15 @@ router.get('/battle/event/battle-id/*/LSN/*', (req, res)=>{
   let id = data[4]
   let LSN = data[6]
   let events = battle.getNewEvent(id, LSN)
-  res.send({status: 'ok', events: event})
+  res.send({status: 'ok', events: events})
+})
+// 对战胜利声明
+router.get('/battle/battle-id/*/username/*', (req, res)=>{
+  let username = req.path.split('/')[5]
+  model.userUpgrade(username)
+  let bat = battle.endBattle(username)
+  bat.winner = username
+  battle.battleLog(bat)
+  res.send({status: 'ok'})
 })
 module.exports = router

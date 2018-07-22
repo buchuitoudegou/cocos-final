@@ -17,8 +17,25 @@ class fileRW {
   addNewUser(user) {
     let userInfo = fs.readFileSync('./server/user.json').toString()
     let users = JSON.parse(userInfo)
+    user.point = 0
     users.push(user)
     fs.writeFileSync('./server/user.json', JSON.stringify(users))
+  }
+  updatePoint(username) {
+    let userInfo = fs.readFileSync('./server/user.json').toString()
+    let users = JSON.parse(userInfo)
+    users.forEach(ele=>{
+      if (ele.username == username) {
+        ele.point += 1
+      }
+    })
+    fs.writeFileSync('./server/user.json', JSON.stringify(users))
+  }
+  addBattleLog(log) {
+    let battleLog = fs.readFileSync('./server/battle.json').toString()
+    let battleLog = JSON.parse(battleLog)
+    battleLog.push(log)
+    fs.writeFileSync('./server/battle.json', JSON.stringify(battleLog))
   }
 }
 
@@ -41,5 +58,8 @@ module.exports = {
     } else {
       return {status: 'duplicated username'}
     }
+  },
+  userUpgrade(username) {
+    file.updatePoint(username)
   }
 }

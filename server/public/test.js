@@ -87,22 +87,24 @@ window.onload = function() {
     }).done((result)=>{
       console.log(result)
       let event_list = (name == 'ff') ? $('#list1').text() : $('#list2').text()
-      if (result.event != null)
-        event_list += JSON.stringify(result.event)
+      if (result.events != null)
+        event_list += JSON.stringify(result.events)
       if (name == 'ff') {
         $('#list1').text(event_list)
         let curLSN = -999;
-        result.event.forEach(ele=>{
+        result.events.forEach(ele=>{
           curLSN = ele.LSN > curLSN ? ele.LSN : curLSN;
         })
-        $('#LSN-0').text(curLSN)
+        if (curLSN != -999)
+          $('#LSN-0').text(curLSN)
       } else {
         let curLSN = -999;
-        result.event.forEach(ele=>{
+        result.events.forEach(ele=>{
           curLSN = ele.LSN > curLSN ? ele.LSN : curLSN;
         })
         $('#list2').text(event_list)
-        $('#LSN-1').text(curLSN)
+        if (curLSN != -999)
+          $('#LSN-1').text(curLSN)
       }
     })
   })
