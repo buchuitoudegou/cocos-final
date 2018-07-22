@@ -6,7 +6,8 @@
 #include "Utils.h"
 #include "fightScene.h"
 USING_NS_CC;
-
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 
 std::string UserScene::name = "";
 Scene* UserScene::createScene(std::string username)
@@ -47,8 +48,8 @@ bool UserScene::init()
 	bg->setScale(2, 2.35);
 	this->addChild(bg, 0);
 
-	//用户名
-	//AppDelegate* app = (AppDelegate *)Application::getInstance();
+	preloadMusic();     // 预加载音乐
+	playBgm();          // 播放背景音乐
 
 
 	//卡牌界面
@@ -149,7 +150,8 @@ void UserScene::showCardInfo(Ref*, int i) {
 }
 
 void UserScene::initFight(Ref*) {
-	//转到斗争界面
+	//停止背景音乐，转到斗争界面 
+	SimpleAudioEngine::getInstance()->stopAllEffects();
 	Director::getInstance()->replaceScene(
 		TransitionSlideInT::create(0.6f, Fight::createScene(UserScene::name)));
 }
@@ -213,9 +215,27 @@ void UserScene::onHttpRecordRequestCompleted(HttpClient* sender, HttpResponse* r
 			//record += std::to_string(v["id"].GetInt64());
 			record += enemy + isWin + "\n  ";
 		}
+		//记录边框
+		auto frame = Sprite::create("frame1.png");
+		frame->setAnchorPoint(Vec2(0.5, 0.5));
+		frame->setPosition(Vec2(visibleSize.width / 2 - 300, visibleSize.height - 280	));
+		frame->setScale(3, 6);
+		this->addChild(frame, 1);
+
 		auto recordLabel = Label::createWithSystemFont(record, "Arial", 25);
 		recordLabel->setPosition(visibleSize.width/2-300, visibleSize.height - 200);
 		recordLabel->setColor(Color3B(237, 216, 199));
 		this->addChild(recordLabel, 1);
 	}
+}
+
+//预加载音乐文件
+void UserScene::preloadMusic() {
+	auto music = SimpleAudioEngine::getInstance();
+	music->preloadBackgroundMusic("music/game.mp3");
+
+}
+//播放背景音乐
+void UserScene::playBgm() {
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("music/game.mp3", true);
 }

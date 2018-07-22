@@ -14,7 +14,9 @@ public:
   void hitSoldier(float dt);
   void move();
   bool createSoldier(Vec2 pos);
-  void preloadMusic();//加载音乐文件
+  void preloadMusic();
+  void playBgm();
+  //加载音乐文件
   void getEnemyInfo();//获取敌人信息
   void setSelectedCard(Ref* pSender, Sprite* select);
  void getSide();//获取我方的边

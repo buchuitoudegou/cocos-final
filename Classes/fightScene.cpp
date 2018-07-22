@@ -3,6 +3,8 @@
 #include <string>
 #pragma execution_character_set("utf-8")
 USING_NS_CC;
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 using namespace std;
 std::string  Fight::name = "";
 Scene* Fight::createScene(string username)
@@ -49,6 +51,10 @@ bool Fight::init()
 	// side = Fight::getSide();
 	side = 0;
 	waterSpeed = 1;//ÉèÖÃ³õÊ¼Ê¥Ë®»Ö¸´ËÙ¶È
+
+
+	preloadMusic();     // Ô¤¼ÓÔØÒôÀÖ
+	playBgm();          // ²¥·Å±³¾°ÒôÀÖ
 
 	//hpÌõ
 	Sprite* sp0 = Sprite::create("hp.png", CC_RECT_PIXELS_TO_POINTS(Rect(0, 320, 420, 47)));
@@ -126,7 +132,7 @@ bool Fight::init()
 	time = Label::createWithTTF("200", "fonts/arial.ttf", 36);
 	//schedule(schedule_selector(Fight::update), 1.0f, kRepeatForever, 0);
 	dtime = 200;
-	time->setPosition(Vec2(origin.x + visibleSize.width - 40,
+	time->setPosition(Vec2(origin.x + visibleSize.width - 50,
 		origin.y + 30));
 	time->setColor(Color3B(255, 122, 179));
 	this->addChild(time, 1);
@@ -295,15 +301,13 @@ void Fight::setSelectedCard(Ref* pSender,Sprite* select) {
 	clickCard = select;
 }
 
-void Fight::preloadMusic() {
 
-}
 
 void Fight::getSide() {
 	side = 0;
 }
 void Fight::endGame() {
-
+	SimpleAudioEngine::getInstance()->playEffect("music/endgame.wav", false);
 }
 Vec2 Fight::findNearest(Sprite* soldier, Vector<Sprite*>& arr) {
 	Vec2 nearest = arr.at(0)->getPosition();
@@ -353,4 +357,17 @@ void Fight::updateMenu() {
 	buttonMenu = Menu::create(card_1, card_2, card_3, card_4, NULL);
 	buttonMenu->setPosition(Vec2(0 + side * origin.x / 2, 0));
 	this->addChild(buttonMenu, 1);
+}
+
+//Ô¤¼ÓÔØÒôÀÖÎÄ¼þ
+void Fight::preloadMusic() {
+	auto music = SimpleAudioEngine::getInstance();
+	music->preloadBackgroundMusic("music/fight.mp3");
+	music->preloadEffect("music/endgame.mp3");
+
+
+}
+//²¥·Å±³¾°ÒôÀÖ
+void Fight::playBgm() {
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("music/fight.mp3", true);
 }

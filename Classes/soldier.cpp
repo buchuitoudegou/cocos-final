@@ -54,6 +54,8 @@ void Factory::initSpriteFrame() {
 			for(int k=0;k<totalFrames;k++){
 				char num[10];
 				sprintf(num,"%03d",k+1);
+				if (soldier == "water-short"&&action == "walk")
+					soldier = "water-remote";
 				std::string frameName = soldier + "-" + action + "-" + num + ".png";
 				nextAnimation->addSpriteFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName));
 			}
@@ -160,7 +162,11 @@ Sprite* Factory::createSoldier(int side,int type){
 	string frameName;
 	if (type == 6)
 		frameName = "tower-001.png";
-	else frameName = soldier + "-" + "walk-001.png";
+	else {
+		if (soldier == "water-short")
+			soldier = "water-remote";
+		frameName = soldier + "-" + "walk-001.png";
+	}
 	newSoldier = Sprite::createWithSpriteFrameName(frameName.c_str());
 	if (side == 0)
 		leftSoldier.pushBack(newSoldier);

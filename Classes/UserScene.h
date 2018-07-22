@@ -20,6 +20,8 @@ public:
 	void onHttpPointRequestCompleted(HttpClient* sender, HttpResponse* response);
 	void onHttpRecordRequestCompleted(HttpClient* sender, HttpResponse* response);
 	void getBattleRecord();
+	void preloadMusic();
+	void playBgm();
 private:
 	static std::string name;
 	int point;
