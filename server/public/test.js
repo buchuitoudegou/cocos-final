@@ -39,6 +39,7 @@ window.onload = function() {
     $.ajax(`api/battle/begin/${username}`, {
       type: 'GET'
     }).done((result)=>{
+      console.log(JSON.stringify(result))
       if (result.status === 'begin') {
         if (username == 'ff') {
           $('#battle-id-1').text(result.id)
@@ -106,6 +107,30 @@ window.onload = function() {
         if (curLSN != -999)
           $('#LSN-1').text(curLSN)
       }
+    })
+  })
+  $('.win').click(function(){
+    let username = $(this).attr('name')
+    let id = username == 'ff' ? $('#battle-id-1').text() : $('#battle-id-2').text()
+    $.ajax(`/api/battle/battle-id/${id}/username/${username}`, {type: 'GET'}).done((result)=>{
+      console.log(result)
+    })
+  })
+  $('#queryPoint').click(()=>{
+    let username = document.getElementById('userquery').value
+    $.ajax(`api/point/username/${username}`, {
+      type: 'GET'
+    }).done((result)=>{
+      console.log(result)
+      $('#point').text('point: ' + result.point)
+    })
+  });
+  $('#queryLog').click(()=>{
+    let username = document.getElementById('userquery').value
+    $.ajax(`api/battlelog/username/${username}`, {
+      type: 'GET'
+    }).done((result)=>{
+      $('#log').text('log: ' + JSON.stringify(result.log))
     })
   })
 }

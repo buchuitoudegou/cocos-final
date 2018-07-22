@@ -25,7 +25,9 @@ router.get('/battle/waiting/*', (req, res)=>{
 // 对战开始轮询
 router.get('/battle/begin/*', (req, res)=>{
   let username = req.path.split('/')[3]
-  let {id,side} = battle.battleBegin(username)
+  let battleInfo = battle.battleBegin(username)
+  let id = battleInfo.id
+  let side = battleInfo.side
   if (id != null) {
     res.send({status: 'begin', id: id, side: side})
   } else {
@@ -52,7 +54,20 @@ router.get('/battle/battle-id/*/username/*', (req, res)=>{
   model.userUpgrade(username)
   let bat = battle.endBattle(username)
   bat.winner = username
-  battle.battleLog(bat)
+  // console.log(bat)
+  model.battleLog(bat)
   res.send({status: 'ok'})
+})
+// 用户积分接口
+router.get('/point/username/*', (req, res)=>{
+  let username = req.path.split('/')[3]
+  let point = model.getUserPoint(username)
+  res.send({status: 'ok', point: point})
+})
+// 用户对战记录
+router.get('/battlelog/username/*', (req, res)=>{
+  let username = req.path.split('/')[3]
+  let data = model.getUserBattleLog(username)
+  res.send({status: 'ok', log: data})
 })
 module.exports = router

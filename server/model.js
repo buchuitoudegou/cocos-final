@@ -24,18 +24,32 @@ class fileRW {
   updatePoint(username) {
     let userInfo = fs.readFileSync('./server/user.json').toString()
     let users = JSON.parse(userInfo)
+    let index = -1
     users.forEach(ele=>{
+      index ++;
       if (ele.username == username) {
-        ele.point += 1
+        return;
       }
     })
+    if (index != -1)
+      users[index].point ++   
     fs.writeFileSync('./server/user.json', JSON.stringify(users))
   }
   addBattleLog(log) {
     let battleLog = fs.readFileSync('./server/battle.json').toString()
-    let battleLog = JSON.parse(battleLog)
+    battleLog = JSON.parse(battleLog)
     battleLog.push(log)
     fs.writeFileSync('./server/battle.json', JSON.stringify(battleLog))
+  }
+  getBattleLog(username) {
+    let data = []
+    let battleLog = fs.readFileSync('./server/battle.json').toString()
+    battleLog = JSON.parse(battleLog)
+    battleLog.forEach(ele=>{
+      if (ele.user1 == username || ele.user2 == username)
+        data.push(ele)
+    })
+    return data
   }
 }
 
@@ -61,5 +75,15 @@ module.exports = {
   },
   userUpgrade(username) {
     file.updatePoint(username)
+  },
+  battleLog(bat) {
+    file.addBattleLog(bat)
+  },
+  getUserPoint(username) {
+    let curUser = file.getUserByName(username)
+    return curUser.point
+  },
+  getUserBattleLog(username) {
+    return file.getBattleLog(username)
   }
 }

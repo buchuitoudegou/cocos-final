@@ -64,12 +64,18 @@ module.exports = {
       if (ele.user1 == username) {
         data = ele.id
         side = 1
+        return
       } else if (ele.user2 == username) {
         data = ele.id
         side = 2
+        return
       }
     })
-    return {data,side}
+    // console.log(data, side)
+    return {
+      id: data,
+      side: side
+    }
   },
   // 信息同步
   syncHandle(){
@@ -81,18 +87,14 @@ module.exports = {
     // 清理缓冲池
     let data = null
     let index = -1
-    battle.forEach(ele=>{
+    this.battle.forEach(ele=>{
       index ++;
       if (ele.user1 == username || ele.user2 == username) {
         data = ele;
         return;
       }
     })
-    battle.splice(index, 1)
-    console.log(battle)
+    this.battle.splice(index, 1)
     return data
-  },
-  battleLog(bat) {
-    file.battleLog(bat)
   }
 }

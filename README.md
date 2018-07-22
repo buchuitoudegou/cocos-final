@@ -48,3 +48,6 @@ cocos2d 期末项目
   + 对战开始轮询GET: api/battle/begin/{用户名}, 返回信息: {status: begin/waiting, id: {对战id}, side: 边}
   + 发送对战事件POST: api/battle/event, request-data: {id: 对战id, event: {eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}, 返回信息: {status: ok}
   + 对战事件轮询GET: api/battle/event/battle-id/{对战id}/LSN/{当前LSN}, 返回信息: {status: ok, events: [{LSN: LSN, event:{eventType: {monster | end-battle }, monsterType: {turret | monster | null}, master: {用户名}, action: {die | create | null}, positionX: {位置的x坐标}, positionY: {位置的y坐标}}}}]
+  + 对战胜利声明GET: api/battle/battle-id/{对战id}/username/{用户名}, 胜利方发出声明。返回信息: {status: ok}
+  + 用户积分查询: api/point/username/{用户名}, 返回信息: {status: ok, point: 用户积分}
+  + 用户对战记录查询: api/battlelog/username/{用户名}, 返回信息: {status: ok, log: [{id: {对战id}, user1: {对战用户1}, user2: {对战用户2}, winner: {胜者}}]} 
