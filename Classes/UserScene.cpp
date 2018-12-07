@@ -209,8 +209,6 @@ void UserScene::onHttpRecordRequestCompleted(HttpClient* sender, HttpResponse* r
 		auto records = doc["log"].GetArray();
 		//添加信息
 		std::string record = "Battle records:\nenemy    result\n  ";
-		//if (records.Size == 0)
-		//	record += "  empty";
 		for (auto& v : records) {
 			auto enemy= UserScene::name==v["user1"].GetString()? v["user2"].GetString(): v["user1"].GetString();
 			std::string isWin = UserScene::name == v["winner"].GetString() ? "          win" : "          lose";
