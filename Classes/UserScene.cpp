@@ -84,7 +84,7 @@ bool UserScene::init()
 	waterShortInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(waterShortInfo, 2);
 
-	auto solidShortInfo = Label::createWithSystemFont("attribute:earth\nattack range:50", "Arial", 15);
+	auto solidShortInfo = Label::createWithSystemFont("attribute:wood\nattack range:50", "Arial", 15);
 	solidShortInfo->setPosition(visibleSize.width / 2 + 200 + 50, visibleSize.height / 2 + 50);
 	solidShortInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(solidShortInfo, 2);
@@ -99,7 +99,7 @@ bool UserScene::init()
 	waterRemoteInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(waterRemoteInfo, 2);
 
-	auto solidRemoteInfo = Label::createWithSystemFont("attribute:earth\nattack range:90", "Arial", 15);
+	auto solidRemoteInfo = Label::createWithSystemFont("attribute:wood\nattack range:90", "Arial", 15);
 	solidRemoteInfo->setPosition(visibleSize.width / 2 + 200 + 50, visibleSize.height / 2-110);
 	solidRemoteInfo->setColor(Color3B(237, 216, 199));
 	this->addChild(solidRemoteInfo, 2);
